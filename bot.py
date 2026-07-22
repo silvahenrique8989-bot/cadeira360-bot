@@ -26,14 +26,11 @@ def main():
 
     mensagem = "🔎 Resultado da busca Cadeira360\n\n"
 
-   if resultados:
-
-    mensagem += "\n\n".join(resultados)
+    if resultados:
+        mensagem += "\n\n".join(resultados)
 
     else:
-
         mensagem += "Nenhum resultado encontrado."
-
 
     enviar_mensagem(mensagem)
 
