@@ -1,6 +1,6 @@
 import os
-from buscador import executar_busca
 import requests
+from buscador import executar_busca
 
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -24,12 +24,12 @@ def main():
 
     resultados = executar_busca()
 
-mensagem = "TESTE NOVO Cadeira360 - VERSÃO API\n\n"
+    mensagem = "🔎 Resultado da busca Cadeira360\n\n"
 
     if resultados:
 
         for item in resultados:
-            mensagem += f"• {item}\n"
+            mensagem += item + "\n\n"
 
     else:
 
