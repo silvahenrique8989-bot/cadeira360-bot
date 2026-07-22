@@ -24,6 +24,11 @@ def buscar_mercado_livre(termo):
 
     dados = resposta.json()
 
+    return [
+    "TESTE API MERCADO LIVRE",
+    str(dados)[:1000]
+]
+
     print(dados)
     
     resultados = []
