@@ -1,6 +1,7 @@
 import requests
 import json
 import urllib.parse
+import xml.etree.ElementTree as ET
 
 
 def carregar_produtos():
@@ -11,31 +12,31 @@ def carregar_produtos():
     return dados["produtos"]
 
 
-def buscar_mercado_livre(termo):
+def buscar_google_rss(termo):
 
     busca = urllib.parse.quote(termo)
 
     url = (
-        "https://api.mercadolibre.com/sites/MLB/search?q="
+        "https://news.google.com/rss/search?q="
         + busca
     )
 
-    resposta = requests.get(url, timeout=10)
+    resposta = requests.get(
+        url,
+        timeout=10
+    )
 
-    dados = resposta.json()
-    
-    print(dados)
-    
     resultados = []
 
-    for item in dados.get("results", [])[:5]:
+    raiz = ET.fromstring(resposta.text)
 
-        titulo = item["title"]
-        preco = item["price"]
-        link = item["permalink"]
+    for item in raiz.findall(".//item")[:5]:
+
+        titulo = item.find("title").text
+        link = item.find("link").text
 
         resultados.append(
-            f"{titulo}\nR$ {preco:.2f}\n{link}"
+            f"{titulo}\n{link}"
         )
 
     return resultados
@@ -49,8 +50,9 @@ def executar_busca():
 
     for produto in produtos:
 
-        resultados = buscar_mercado_livre(
+        resultados = buscar_google_rss(
             produto["busca"]
+            + " preço promoção"
         )
 
         resultados_finais.extend(resultados)
