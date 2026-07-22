@@ -14,44 +14,30 @@ def criar_links(produto):
 
     termo = urllib.parse.quote(produto["busca"])
 
-    resultados = []
-
-    resultados.append(
-        f"🪑 {produto['nome']}\n"
+    mensagem = (
+        f"🪑 {produto['nome']}\n\n"
+        f"Amazon:\n"
+        f"https://www.amazon.com.br/s?k={termo}\n\n"
+        f"Mercado Livre:\n"
+        f"https://lista.mercadolivre.com.br/{termo}\n\n"
+        f"Google Shopping:\n"
+        f"https://www.google.com/search?tbm=shop&q={termo}\n\n"
+        f"------------------------"
     )
 
-    resultados.append(
-        "Amazon:\n"
-        f"https://www.amazon.com.br/s?k={termo}\n"
-    )
-
-    resultados.append(
-        "Mercado Livre:\n"
-        f"https://lista.mercadolivre.com.br/{termo}\n"
-    )
-
-    resultados.append(
-        "Google Shopping:\n"
-        f"https://www.google.com/search?tbm=shop&q={termo}\n"
-    )
-
-    resultados.append(
-        "------------------------"
-    )
-
-    return "\n".join(resultados)
+    return mensagem
 
 
 def executar_busca():
 
     produtos = carregar_produtos()
 
-    mensagens = []
+    resultados = []
 
     for produto in produtos:
 
-        mensagens.append(
+        resultados.append(
             criar_links(produto)
         )
 
-    return mensagens
+    return resultados
