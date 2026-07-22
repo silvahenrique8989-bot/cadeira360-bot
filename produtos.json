@@ -1,9 +1,6 @@
 {
-  "produtos": [
-    {
-      "nome": "Safety 1st i-NXT 360",
-      "busca": "Safety 1st i-NXT 360",
-      "preco_alerta": 1500
-    }
-  ]
+  "nome": "Safety 1st i-NXT 360",
+  "busca": "Safety 1st i-NXT 360",
+  "preco_bom": 1700,
+  "preco_excelente": 1500
 }
