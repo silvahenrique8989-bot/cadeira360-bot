@@ -24,7 +24,7 @@ def main():
 
     resultados = executar_busca()
 
-    mensagem = "🔎 Resultado da busca Cadeira360\n\n"
+mensagem = "TESTE NOVO Cadeira360 - VERSÃO API\n\n"
 
     if resultados:
 
