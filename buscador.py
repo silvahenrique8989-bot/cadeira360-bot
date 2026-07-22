@@ -11,11 +11,14 @@ def carregar_produtos():
     return dados["produtos"]
 
 
-def buscar_web(termo):
+def buscar_mercado_livre(termo):
 
-    consulta = urllib.parse.quote(termo)
+    busca = urllib.parse.quote(termo)
 
-    url = f"https://html.duckduckgo.com/html/?q={consulta}"
+    url = (
+        "https://lista.mercadolivre.com.br/"
+        + busca
+    )
 
     headers = {
         "User-Agent": "Mozilla/5.0"
@@ -34,15 +37,14 @@ def buscar_web(termo):
 
     resultados = []
 
-    links = soup.find_all(
-        "a",
-        class_="result__a"
+    produtos = soup.find_all(
+        "h2",
+        class_="poly-box__title"
     )
 
-    for link in links[:5]:
-
+    for produto in produtos[:5]:
         resultados.append(
-            link.text
+            produto.text.strip()
         )
 
     return resultados
@@ -56,16 +58,10 @@ def executar_busca():
 
     for produto in produtos:
 
-        for site in produto["sites"]:
+        resultados = buscar_mercado_livre(
+            produto["busca"]
+        )
 
-            termo = (
-                produto["busca"]
-                + " "
-                + site
-            )
-
-            resultados = buscar_web(termo)
-
-            resultados_finais.extend(resultados)
+        resultados_finais.extend(resultados)
 
     return resultados_finais
