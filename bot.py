@@ -26,10 +26,9 @@ def main():
 
     mensagem = "🔎 Resultado da busca Cadeira360\n\n"
 
-    if resultados:
+   if resultados:
 
-        for item in resultados:
-            mensagem += item + "\n\n"
+    mensagem += "\n\n".join(resultados)
 
     else:
 
