@@ -1,10 +1,10 @@
 import requests
-from bs4 import BeautifulSoup
 import json
 import urllib.parse
 
 
 def carregar_produtos():
+
     with open("produtos.json", "r", encoding="utf-8") as arquivo:
         dados = json.load(arquivo)
 
@@ -16,35 +16,24 @@ def buscar_mercado_livre(termo):
     busca = urllib.parse.quote(termo)
 
     url = (
-        "https://lista.mercadolivre.com.br/"
+        "https://api.mercadolibre.com/sites/MLB/search?q="
         + busca
     )
 
-    headers = {
-        "User-Agent": "Mozilla/5.0"
-    }
+    resposta = requests.get(url, timeout=10)
 
-    resposta = requests.get(
-        url,
-        headers=headers,
-        timeout=10
-    )
-
-    soup = BeautifulSoup(
-        resposta.text,
-        "html.parser"
-    )
+    dados = resposta.json()
 
     resultados = []
 
-    produtos = soup.find_all(
-        "h2",
-        class_="poly-box__title"
-    )
+    for item in dados.get("results", [])[:5]:
 
-    for produto in produtos[:5]:
+        titulo = item["title"]
+        preco = item["price"]
+        link = item["permalink"]
+
         resultados.append(
-            produto.text.strip()
+            f"{titulo}\nR$ {preco:.2f}\n{link}"
         )
 
     return resultados
