@@ -53,4 +53,4 @@ def executar_busca():
         resultados_finais.extend(resultados)
 
     return resultados_finais
-
+        
