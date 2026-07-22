@@ -24,6 +24,8 @@ def buscar_mercado_livre(termo):
 
     dados = resposta.json()
 
+    print(dados)
+    
     resultados = []
 
     for item in dados.get("results", [])[:5]:
