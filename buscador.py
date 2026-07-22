@@ -44,16 +44,13 @@ def executar_busca():
 
     produtos = carregar_produtos()
 
-    for produto in produtos:
+    resultados_finais = []
 
-        print("=" * 50)
-        print(produto["nome"])
+    for produto in produtos:
 
         resultados = buscar_google(produto["busca"])
 
-        for resultado in resultados:
-            print(resultado)
+        resultados_finais.extend(resultados)
 
+    return resultados_finais
 
-if __name__ == "__main__":
-    executar_busca()
