@@ -3,6 +3,10 @@
     {
       "nome": "Safety 1st i-NXT 360",
       "busca": "Safety 1st i-NXT 360",
+      "sites": [
+        "amazon.com.br",
+        "mercadolivre.com.br"
+      ],
       "preco_bom": 1700,
       "preco_excelente": 1500
     }
