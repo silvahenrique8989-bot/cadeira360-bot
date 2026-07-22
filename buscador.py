@@ -11,11 +11,11 @@ def carregar_produtos():
     return dados["produtos"]
 
 
-def buscar_google(termo):
+def buscar_web(termo):
 
     consulta = urllib.parse.quote(termo)
 
-    url = f"https://www.google.com/search?q={consulta}"
+    url = f"https://html.duckduckgo.com/html/?q={consulta}"
 
     headers = {
         "User-Agent": "Mozilla/5.0"
@@ -34,10 +34,18 @@ def buscar_google(termo):
 
     resultados = []
 
-    for item in soup.find_all("h3"):
-        resultados.append(item.text)
+    links = soup.find_all(
+        "a",
+        class_="result__a"
+    )
 
-    return resultados[:5]
+    for link in links[:5]:
+
+        resultados.append(
+            link.text
+        )
+
+    return resultados
 
 
 def executar_busca():
@@ -48,8 +56,16 @@ def executar_busca():
 
     for produto in produtos:
 
-        resultados = buscar_google(produto["busca"])
+        for site in produto["sites"]:
 
-        resultados_finais.extend(resultados)
+            termo = (
+                produto["busca"]
+                + " "
+                + site
+            )
+
+            resultados = buscar_web(termo)
+
+            resultados_finais.extend(resultados)
 
     return resultados_finais
