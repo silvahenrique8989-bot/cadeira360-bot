@@ -1,7 +1,5 @@
-import requests
 import json
 import urllib.parse
-import xml.etree.ElementTree as ET
 
 
 def carregar_produtos():
@@ -12,49 +10,48 @@ def carregar_produtos():
     return dados["produtos"]
 
 
-def buscar_google_rss(termo):
+def criar_links(produto):
 
-    busca = urllib.parse.quote(termo)
-
-    url = (
-        "https://news.google.com/rss/search?q="
-        + busca
-    )
-
-    resposta = requests.get(
-        url,
-        timeout=10
-    )
+    termo = urllib.parse.quote(produto["busca"])
 
     resultados = []
 
-    raiz = ET.fromstring(resposta.text)
+    resultados.append(
+        f"🪑 {produto['nome']}\n"
+    )
 
-    for item in raiz.findall(".//item")[:5]:
+    resultados.append(
+        "Amazon:\n"
+        f"https://www.amazon.com.br/s?k={termo}\n"
+    )
 
-        titulo = item.find("title").text
-        link = item.find("link").text
+    resultados.append(
+        "Mercado Livre:\n"
+        f"https://lista.mercadolivre.com.br/{termo}\n"
+    )
 
-        resultados.append(
-            f"{titulo}\n{link}"
-        )
+    resultados.append(
+        "Google Shopping:\n"
+        f"https://www.google.com/search?tbm=shop&q={termo}\n"
+    )
 
-    return resultados
+    resultados.append(
+        "------------------------"
+    )
+
+    return "\n".join(resultados)
 
 
 def executar_busca():
 
     produtos = carregar_produtos()
 
-    resultados_finais = []
+    mensagens = []
 
     for produto in produtos:
 
-        resultados = buscar_google_rss(
-            produto["busca"]
-            + " preço promoção"
+        mensagens.append(
+            criar_links(produto)
         )
 
-        resultados_finais.extend(resultados)
-
-    return resultados_finais
+    return mensagens
