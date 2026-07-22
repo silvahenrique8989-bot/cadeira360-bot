@@ -1,0 +1,14 @@
+{
+  "produtos": [
+    {
+      "nome": "Safety 1st i-NXT 360",
+      "excelente": 1500,
+      "boa_compra": 1700
+    },
+    {
+      "nome": "Safety 1st Orbital 360",
+      "excelente": 1500,
+      "boa_compra": 1700
+    }
+  ]
+}
