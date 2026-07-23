@@ -1,14 +1,9 @@
 {
-  "produtos": [
-    {
-      "nome": "Safety 1st i-NXT 360",
-      "ativo": true,
-      "preco_alvo": 1500,
-      "preco_bom": 1700,
-      "pesquisas": [
-        "Safety 1st i-NXT 360",
-        "Safety 1st i-NXT"
-      ]
-    }
-  ]
+    "produtos": [
+        {
+            "nome": "Safety 1st i-NXT 360",
+            "preco_alvo": 1500,
+            "ativo": true
+        }
+    ]
 }
