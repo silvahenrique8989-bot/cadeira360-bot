@@ -1,72 +1,56 @@
-"""
-historico.py
-
-Responsável por ler e salvar o histórico de preços enviados.
-"""
-
 import json
-from pathlib import Path
+import os
 
-from config import HISTORICO_FILE
+ARQUIVO = "data/historico.json"
 
 
-def carregar():
-    """
-    Carrega o histórico.
-    """
+def carregar_historico():
 
-    if not Path(HISTORICO_FILE).exists():
+    if not os.path.exists(ARQUIVO):
         return {}
 
-    try:
-        with open(HISTORICO_FILE, "r", encoding="utf-8") as arquivo:
-            return json.load(arquivo)
-    except Exception:
-        return {}
+    with open(ARQUIVO, "r", encoding="utf-8") as arquivo:
+        return json.load(arquivo)
 
 
-def salvar(historico):
-    """
-    Salva o histórico.
-    """
 
-    with open(HISTORICO_FILE, "w", encoding="utf-8") as arquivo:
+def salvar_historico(dados):
+
+    with open(ARQUIVO, "w", encoding="utf-8") as arquivo:
         json.dump(
-            historico,
+            dados,
             arquivo,
             indent=4,
             ensure_ascii=False
         )
 
 
+
 def ultimo_preco(produto, loja):
-    """
-    Retorna o último preço salvo.
-    """
 
-    historico = carregar()
+    historico = carregar_historico()
 
-    return (
-        historico
-        .get(produto, {})
-        .get(loja, {})
-        .get("preco")
-    )
+    try:
+        return historico[produto][loja]["preco"]
+
+    except KeyError:
+        return None
+
 
 
 def atualizar(produto, loja, preco, link):
-    """
-    Atualiza o histórico.
-    """
 
-    historico = carregar()
+    historico = carregar_historico()
+
 
     if produto not in historico:
         historico[produto] = {}
+
 
     historico[produto][loja] = {
         "preco": preco,
         "link": link
     }
 
-    salvar(historico)
+
+    salvar_historico(historico)
