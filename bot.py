@@ -1,19 +1,39 @@
-from buscador import gerar_buscas
+import os
+import requests
+from buscador import executar_busca
 
-dados = gerar_buscas()
 
-mensagem = "🔎 Resultado da busca Cadeira360\n\n"
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
-for produto in dados:
 
-    mensagem += f"🪑 {produto['produto']}\n\n"
+def enviar_mensagem(texto):
 
-    for busca in produto["buscas"]:
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 
-        mensagem += (
-            f"📍 {busca['site']}\n"
-            f"🔍 {busca['pesquisa']}\n"
-            f"{busca['link']}\n\n"
-        )
+    requests.post(
+        url,
+        json={
+            "chat_id": CHAT_ID,
+            "text": texto
+        }
+    )
 
-    mensagem += "-----------------------------\n\n"
+
+def main():
+
+    resultados = executar_busca()
+
+    mensagem = "🔎 Resultado da busca Cadeira360\n\n"
+
+    if resultados:
+        mensagem += "\n\n".join(resultados)
+
+    else:
+        mensagem += "Nenhum resultado encontrado."
+
+    enviar_mensagem(mensagem)
+
+
+if __name__ == "__main__":
+    main()
