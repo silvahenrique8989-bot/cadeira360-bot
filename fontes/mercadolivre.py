@@ -53,7 +53,13 @@ def buscar(produto):
 
             return ofertas
 
+        
+        with open("mercado_debug.html", "w", encoding="utf-8") as arquivo:
+        arquivo.write(resposta.text)
 
+        print("Página salva para análise.")
+
+        
         soup = BeautifulSoup(
             resposta.text,
             "lxml"
