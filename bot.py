@@ -44,7 +44,7 @@ def analisar_oferta(produto, oferta):
                 "🎉 EXCELENTE OPORTUNIDADE\n\n"
                 f"🪑 {produto['nome']}\n\n"
                 f"🏪 {oferta['loja']}\n\n"
-                f"💰 R$ {preco:,.2f}\n\n"
+                f"💰 R$ {preco:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
                 f"📉 {percentual:.1f}% abaixo do seu preço-alvo\n\n"
                 f"🔗 {oferta['link']}"
             )
@@ -61,7 +61,7 @@ def analisar_oferta(produto, oferta):
                 "🟡 BOA OFERTA\n\n"
                 f"🪑 {produto['nome']}\n\n"
                 f"🏪 {oferta['loja']}\n\n"
-                f"💰 R$ {preco:,.2f}\n\n"
+                f"💰 R$ {preco:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
                 f"📈 {percentual:.1f}% acima do seu preço-alvo\n\n"
                 f"🔗 {oferta['link']}"
             )
