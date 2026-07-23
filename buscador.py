@@ -1,18 +1,27 @@
 """
 buscador.py
 
-Versão temporária para testar o fluxo do projeto.
+Gerencia todas as fontes de busca do Cadeira360.
 """
+
+
+from fontes import mercadolivre
+
+
 
 def buscar_ofertas(produto):
     """
-    Retorna uma oferta fictícia para validar o funcionamento do sistema.
+    Consulta todas as fontes disponíveis
+    e retorna uma lista de ofertas.
     """
 
-    return [
-        {
-            "loja": "Amazon",
-            "preco": 1489.90,
-            "link": "https://www.amazon.com.br/"
-        }
-    ]
+    ofertas = []
+
+
+    # Mercado Livre
+    resultados_ml = mercadolivre.buscar(produto)
+
+    ofertas.extend(resultados_ml)
+
+
+    return ofertas
