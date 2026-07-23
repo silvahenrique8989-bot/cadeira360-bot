@@ -1,43 +1,56 @@
 import json
-import urllib.parse
+from urllib.parse import quote_plus
+
+
+SITES = [
+    "pelando.com.br",
+    "promobit.com.br"
+]
 
 
 def carregar_produtos():
 
-    with open("produtos.json", "r", encoding="utf-8") as arquivo:
-        dados = json.load(arquivo)
-
-    return dados["produtos"]
+    with open("produtos.json", encoding="utf-8") as arquivo:
+        return json.load(arquivo)
 
 
-def criar_links(produto):
-
-    termo = urllib.parse.quote(produto["busca"])
-
-    mensagem = (
-        f"🪑 {produto['nome']}\n\n"
-        f"Amazon:\n"
-        f"https://www.amazon.com.br/s?k={termo}\n\n"
-        f"Mercado Livre:\n"
-        f"https://lista.mercadolivre.com.br/{termo}\n\n"
-        f"Google Shopping:\n"
-        f"https://www.google.com/search?tbm=shop&q={termo}\n\n"
-        f"------------------------"
-    )
-
-    return mensagem
-
-
-def executar_busca():
+def gerar_buscas():
 
     produtos = carregar_produtos()
 
-    resultados = []
+    resultado = []
 
     for produto in produtos:
 
-        resultados.append(
-            criar_links(produto)
-        )
+        buscas = []
 
-    return resultados
+        for pesquisa in produto["pesquisas"]:
+
+            for site in SITES:
+
+                consulta = f"site:{site} {pesquisa}"
+
+                link = (
+                    "https://www.google.com/search?q="
+                    + quote_plus(consulta)
+                )
+
+                buscas.append({
+                    "site": site,
+                    "pesquisa": pesquisa.replace('"', ''),
+                    "link": link
+                })
+
+        resultado.append({
+
+            "produto": produto["nome"],
+
+            "preco_excelente": produto["preco_excelente"],
+
+            "preco_bom": produto["preco_bom"],
+
+            "buscas": buscas
+
+        })
+
+    return resultado
