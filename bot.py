@@ -25,6 +25,22 @@ def carregar_produtos():
 
 
 
+def formatar_preco(valor):
+    """
+    Formata valores no padrão brasileiro.
+    Exemplo:
+    1489.90 -> R$ 1.489,90
+    """
+
+    return (
+        f"R$ {valor:,.2f}"
+        .replace(",", "X")
+        .replace(".", ",")
+        .replace("X", ".")
+    )
+
+
+
 def analisar_oferta(produto, oferta):
     """
     Classifica a oferta conforme o preço alvo.
@@ -38,34 +54,40 @@ def analisar_oferta(produto, oferta):
 
         percentual = ((alvo - preco) / alvo) * 100
 
+        mensagem = (
+            "🎉 EXCELENTE OPORTUNIDADE\n\n"
+            f"🪑 {produto['nome']}\n\n"
+            f"🏪 {oferta['loja']}\n\n"
+            f"💰 {formatar_preco(preco)}\n\n"
+            f"📉 {percentual:.1f}% abaixo do seu preço-alvo\n\n"
+            f"🔗 {oferta['link']}"
+        )
+
         return {
             "status": "excelente",
-            "mensagem": (
-                "🎉 EXCELENTE OPORTUNIDADE\n\n"
-                f"🪑 {produto['nome']}\n\n"
-                f"🏪 {oferta['loja']}\n\n"
-                f"💰 R$ {preco:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-                f"📉 {percentual:.1f}% abaixo do seu preço-alvo\n\n"
-                f"🔗 {oferta['link']}"
-            )
+            "mensagem": mensagem
         }
+
 
 
     elif preco <= 1700:
 
         percentual = ((preco - alvo) / alvo) * 100
 
+        mensagem = (
+            "🟡 BOA OFERTA\n\n"
+            f"🪑 {produto['nome']}\n\n"
+            f"🏪 {oferta['loja']}\n\n"
+            f"💰 {formatar_preco(preco)}\n\n"
+            f"📈 {percentual:.1f}% acima do seu preço-alvo\n\n"
+            f"🔗 {oferta['link']}"
+        )
+
         return {
             "status": "boa",
-            "mensagem": (
-                "🟡 BOA OFERTA\n\n"
-                f"🪑 {produto['nome']}\n\n"
-                f"🏪 {oferta['loja']}\n\n"
-                f"💰 R$ {preco:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-                f"📈 {percentual:.1f}% acima do seu preço-alvo\n\n"
-                f"🔗 {oferta['link']}"
-            )
+            "mensagem": mensagem
         }
+
 
 
     else:
@@ -107,7 +129,7 @@ def executar():
             if analise["status"] == "ignorar":
 
                 print(
-                    f"Oferta ignorada: R$ {oferta['preco']}"
+                    f"Oferta ignorada: {oferta['preco']}"
                 )
 
                 continue
