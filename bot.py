@@ -1,39 +1,73 @@
-import os
-import requests
-from buscador import executar_busca
+"""
+bot.py
+
+Controla o fluxo principal do Cadeira360.
+"""
+
+import json
+
+from config import PRODUTOS_FILE
+from buscador import buscar_ofertas
+from telegram import enviar_mensagem
+from historico import ultimo_preco, atualizar
 
 
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+def carregar_produtos():
+    """
+    Carrega os produtos monitorados.
+    """
+
+    with open(PRODUTOS_FILE, "r", encoding="utf-8") as arquivo:
+        dados = json.load(arquivo)
+
+    return dados["produtos"]
 
 
-def enviar_mensagem(texto):
+def executar():
+    """
+    Executa o monitor.
+    """
 
-    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+    produtos = carregar_produtos()
 
-    requests.post(
-        url,
-        json={
-            "chat_id": CHAT_ID,
-            "text": texto
-        }
-    )
+    for produto in produtos:
 
+        if not produto.get("ativo", True):
+            continue
 
-def main():
+        print(f"Verificando: {produto['nome']}")
 
-    resultados = executar_busca()
+        ofertas = buscar_ofertas(produto)
 
-    mensagem = "🔎 Resultado da busca Cadeira360\n\n"
+        for oferta in ofertas:
 
-    if resultados:
-        mensagem += "\n\n".join(resultados)
+            ultimo = ultimo_preco(
+                produto["nome"],
+                oferta["loja"]
+            )
 
-    else:
-        mensagem += "Nenhum resultado encontrado."
+            if ultimo == oferta["preco"]:
+                print(
+                    f"Preço repetido em {oferta['loja']}. Ignorado."
+                )
+                continue
 
-    enviar_mensagem(mensagem)
+            mensagem = f"""
+🪑 {produto['nome']}
 
+🏪 {oferta['loja']}
 
-if __name__ == "__main__":
-    main()
+💰 R$ {oferta['preco']:.2f}
+
+🔗 {oferta['link']}
+"""
+
+            enviado = enviar_mensagem(mensagem.strip())
+
+            if enviado:
+                atualizar(
+                    produto["nome"],
+                    oferta["loja"],
+                    oferta["preco"],
+                    oferta["link"]
+                )
