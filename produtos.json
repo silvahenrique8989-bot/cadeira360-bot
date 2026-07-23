@@ -1,12 +1,12 @@
-{
-  "produtos": [
+[
     {
-      "nome": "Safety 1st i-NXT 360",
-      "busca": "Safety 1st i-NXT 360"
-    },
-    {
-      "nome": "Safety 1st Orbital 360",
-      "busca": "Safety 1st Orbital 360"
+        "nome": "Safety 1st i-NXT 360",
+        "preco_excelente": 1500,
+        "preco_bom": 1700,
+        "pesquisas": [
+            "\"Safety 1st i-NXT 360\"",
+            "\"Safety 1st i-NXT\"",
+            "\"Cadeirinha i-NXT\""
+        ]
     }
-  ]
-}
+]
